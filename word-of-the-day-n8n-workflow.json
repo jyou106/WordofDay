@@ -1,0 +1,79 @@
+{
+  "name": "Word of the Day Language Learner",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=YOUR_API_KEY",
+        "responseFormat": "json"
+      },
+      "name": "Get Word of the Day",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        300,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "sheetId": "YOUR_SHEET_ID",
+        "range": "Sheet1!A:D",
+        "valueInputMode": "USER_ENTERED",
+        "dataMode": "defineBelow",
+        "options": {},
+        "keyValue": [
+          {
+            "key": "Word",
+            "value": "={{ $json.word }}"
+          },
+          {
+            "key": "Definition",
+            "value": "={{ $json.definitions[0].text }}"
+          },
+          {
+            "key": "PartOfSpeech",
+            "value": "={{ $json.definitions[0].partOfSpeech }}"
+          },
+          {
+            "key": "Example",
+            "value": "={{ $json.examples[0].text }}"
+          }
+        ]
+      },
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        500,
+        300
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "1",
+          "name": "Google API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Get Word of the Day": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "1748831365.892744",
+  "tags": [
+    "language-learning",
+    "word-of-the-day"
+  ]
+}
